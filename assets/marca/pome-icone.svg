@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Ícone do app Pome">
+<rect x="0" y="0" width="512" height="512" rx="112" fill="#060806"/>
+<circle cx="256" cy="252" r="200" fill="#2BFF88" fill-opacity="0.05"/>
+<circle cx="256" cy="252" r="128" fill="#2BFF88" fill-opacity="0.08"/>
+<circle cx="256" cy="252" r="64" fill="#2BFF88" fill-opacity="0.12"/>
+<circle cx="256" cy="252" r="196" fill="none" stroke="#2BFF88" stroke-opacity="0.18" stroke-width="6"/>
+<circle cx="256" cy="252" r="196" fill="none" stroke="#5BFFA6" stroke-opacity="0.7" stroke-width="2"/>
+<path d="M245 228 C249 274 249 304 243 334 L269 334 C263 304 263 274 267 228 Z" fill="#9BFFCB"/>
+<g id="h">
+<path d="M256 240 C300 244 348 256 372 286" fill="none" stroke="#2BFF88" stroke-opacity="0.32" stroke-width="16" stroke-linecap="round"/>
+<path d="M256 230 C306 224 356 214 388 210" fill="none" stroke="#2BFF88" stroke-opacity="0.32" stroke-width="15" stroke-linecap="round"/>
+<path d="M256 226 C290 200 326 168 348 150" fill="none" stroke="#2BFF88" stroke-opacity="0.32" stroke-width="14" stroke-linecap="round"/>
+<path d="M256 240 C300 244 348 256 372 286" fill="none" stroke="#8BFFC2" stroke-width="6" stroke-linecap="round"/>
+<path d="M256 230 C306 224 356 214 388 210" fill="none" stroke="#8BFFC2" stroke-width="6" stroke-linecap="round"/>
+<path d="M256 226 C290 200 326 168 348 150" fill="none" stroke="#8BFFC2" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M332 230 Q352 218 360 200" fill="none" stroke="#5BFFA6" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="372" cy="286" r="16" fill="#2BFF88" fill-opacity="0.45"/>
+<circle cx="388" cy="210" r="16" fill="#2BFF88" fill-opacity="0.45"/>
+<circle cx="348" cy="150" r="14" fill="#2BFF88" fill-opacity="0.45"/>
+<circle cx="372" cy="286" r="7" fill="#CFFFE6"/>
+<circle cx="388" cy="210" r="7" fill="#CFFFE6"/>
+<circle cx="348" cy="150" r="6" fill="#CFFFE6"/>
+<circle cx="360" cy="200" r="4.5" fill="#8BFFC2"/>
+<circle cx="330" cy="188" r="4" fill="#8BFFC2"/>
+<path d="M256 332 C300 336 348 350 366 378" fill="none" stroke="#2BFF88" stroke-opacity="0.2" stroke-width="11" stroke-linecap="round"/>
+<path d="M256 334 C292 352 322 386 334 412" fill="none" stroke="#2BFF88" stroke-opacity="0.2" stroke-width="11" stroke-linecap="round"/>
+<path d="M256 332 C300 336 348 350 366 378" fill="none" stroke="#5BFFA6" stroke-opacity="0.85" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M256 334 C292 352 322 386 334 412" fill="none" stroke="#5BFFA6" stroke-opacity="0.85" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M242 334 C224 346 220 364 234 372 C244 377 249 366 242 360" fill="none" stroke="#5BFFA6" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="366" cy="378" r="5" fill="#8BFFC2"/>
+<circle cx="334" cy="412" r="4.5" fill="#8BFFC2"/>
+</g>
+<use href="#h" transform="translate(512,0) scale(-1,1)"/>
+<path d="M256 226 L256 128" fill="none" stroke="#2BFF88" stroke-opacity="0.32" stroke-width="14" stroke-linecap="round"/>
+<path d="M256 226 L256 128" fill="none" stroke="#8BFFC2" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M256 332 L256 414" fill="none" stroke="#5BFFA6" stroke-opacity="0.85" stroke-width="4.5" stroke-linecap="round"/>
+<circle cx="256" cy="124" r="18" fill="#2BFF88" fill-opacity="0.45"/>
+<circle cx="256" cy="124" r="8" fill="#DFFFEE"/>
+<circle cx="256" cy="414" r="5" fill="#8BFFC2"/>
+<circle cx="256" cy="284" r="30" fill="#2BFF88" fill-opacity="0.3"/>
+<circle cx="256" cy="284" r="15" fill="#2BFF88" fill-opacity="0.5"/>
+<circle cx="256" cy="284" r="8" fill="#EAFFF4"/>
+</svg>

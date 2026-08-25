@@ -1,0 +1,22 @@
+/* GERADO por scripts/gerar-site.ts — não editar à mão.
+   A paleta vem de src/theme/tokens.ts, que é a fonte única da marca. */
+:root {
+  --bg: #060806;
+  --surface: #0F120F;
+  --surface-alta: #161A16;
+  --neon: #2BFF88;
+  --neon-mid: #5BFFA6;
+  --neon-soft: #8BFFC2;
+  --neon-dim: rgba(43,255,136,0.18);
+  --neon-wash: rgba(43,255,136,0.08);
+  --cream: #F1EFE3;
+  --cream-mid: rgba(241,239,227,0.66);
+  --cream-soft: rgba(241,239,227,0.38);
+  --border: rgba(43,255,136,0.18);
+  --border-neutra: rgba(241,239,227,0.10);
+  --entrada: #2BFF88;
+  --saida: #FF6B6B;
+  --atencao: #FFC857;
+  --fonte-titulo: 'Fraunces', Georgia, serif;
+  --fonte-corpo: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}

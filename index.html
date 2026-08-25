@@ -1,0 +1,250 @@
+<!doctype html>
+<!--
+  Página inicial do site do Pome.
+
+  Escrita à mão — texto de divulgação é redação, e não tem fonte no app. O que
+  TEM fonte no app é gerado: os termos, a política e a paleta saem de
+  `npm run site`. Ver `scripts/gerar-site.ts`.
+
+  Regra deste arquivo: toda afirmação aqui precisa ser verdadeira sobre o app
+  como ele é hoje. Nada de "em breve para Android", nada de depoimento, nada de
+  número de usuários, nada de nota ou score — o app não tem nenhum dos quatro.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pome — economizar com propósito</title>
+  <meta name="description" content="Aplicativo gratuito de organização financeira pessoal para Windows. Seus dados ficam no seu computador: sem cadastro, sem servidor, sem rastreador.">
+  <meta name="theme-color" content="#060806">
+
+  <meta property="og:title" content="Pome — economizar com propósito">
+  <meta property="og:description" content="Organize seu dinheiro em volta de uma meta com nome. Grátis, para Windows, e sem enviar nada para lugar nenhum.">
+  <meta property="og:image" content="assets/marca/pome-icone.png">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+
+  <link rel="icon" href="assets/marca/pome-icone.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="index.html">
+      <img src="assets/marca/pome-emblema.svg" alt="" width="28" height="28">
+      <span>Pome</span>
+    </a>
+    <nav>
+      <a href="#o-que-e">O que é</a>
+      <a href="#dados">Seus dados</a>
+      <a href="#baixar">Baixar</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ── Hero ────────────────────────────────────────────────── -->
+    <div class="hero envolucro" id="baixar">
+      <h1>Economizar com propósito.</h1>
+      <p class="linha-fina">
+        O Pome organiza o seu dinheiro em volta de uma meta que tem nome — e não
+        em volta de uma planilha.
+      </p>
+
+      <div class="baixar">
+        <!-- O endereço, o tamanho e a impressão digital são preenchidos por
+             `assets/versao.js`, que `npm run site` gera medindo o instalador
+             de verdade. Nada disso é digitado aqui. -->
+        <a class="botao" id="botao-baixar" href="#" download>
+          Baixar para Windows
+        </a>
+        <p class="selos">
+          <span>Grátis</span>
+          <span>Windows 10 e 11</span>
+          <span>Sem cadastro</span>
+          <span id="selo-tamanho">98 MB</span>
+        </p>
+      </div>
+
+      <p class="aviso-windows" id="aviso-windows">
+        <strong>O Windows vai avisar que não conhece este programa.</strong>
+        Isso acontece porque o instalador ainda não tem certificado de
+        assinatura — não porque haja algo de errado com ele. Para instalar
+        mesmo assim: <em>Mais informações</em> → <em>Executar assim mesmo</em>.
+        Se quiser conferir que o arquivo é o mesmo que publicamos, o SHA-256 é
+        <span class="impressao" id="impressao">—</span>
+      </p>
+    </div>
+
+    <!-- ── Os aparelhos ────────────────────────────────────────── -->
+    <div class="envolucro">
+      <div class="aparelhos">
+        <div class="notebook">
+          <div class="tela">
+            <img src="assets/telas/home.png" width="1359" height="942"
+                 alt="Tela inicial do Pome: a meta 'Minha liberdade' no centro de um anel, com o valor guardado e o mês em foco.">
+          </div>
+          <div class="base"></div>
+        </div>
+
+        <div class="tablet">
+          <div class="tela">
+            <img src="assets/telas/saude.png" width="1359" height="942"
+                 alt="Tela de saúde financeira do Pome: gráfico de entradas e saídas por mês e três indicadores com a faixa recomendada.">
+          </div>
+        </div>
+      </div>
+      <p class="legenda">
+        O Pome rodando no Windows. Ainda não existe versão para celular.
+      </p>
+    </div>
+
+    <!-- ── Os três diferenciais ────────────────────────────────── -->
+    <section class="faixa" id="o-que-e">
+      <div class="envolucro">
+        <p class="olho">O que é</p>
+        <h2>Um aliado honesto, não mais um app de planilha.</h2>
+        <p class="sobrio" style="max-width: 60ch">
+          Você registra o que entra e o que sai, e o Pome mostra para onde o seu
+          dinheiro está indo — sempre ao lado do sonho que você mesmo nomeou.
+        </p>
+
+        <div class="tres">
+          <article class="cartao">
+            <h3>Propósito primeiro</h3>
+            <p>
+              O app começa perguntando qual é o sonho, não quanto você ganha. A
+              meta ganha nome — "intercâmbio", "carro", "sair do aluguel" — e é
+              ela que fica no centro da tela inicial.
+            </p>
+            <p>Número existe para servir ao sonho, não o contrário.</p>
+          </article>
+
+          <article class="cartao">
+            <h3>Seus direitos à mão</h3>
+            <p>
+              O material de estudo cobre o que costuma custar caro por
+              desconhecimento: teto do rotativo, Custo Efetivo Total,
+              portabilidade de dívida, direito de arrependimento em sete dias e
+              a Lei do Superendividamento.
+            </p>
+            <p>Texto de lei é público, e está citado com a fonte.</p>
+          </article>
+
+          <article class="cartao">
+            <h3>Evidência, com crédito</h3>
+            <p>
+              Os princípios que aparecem no app vêm de educadores financeiros
+              reais, parafraseados e sempre com autor e obra indicados.
+            </p>
+            <p>
+              Nenhuma frase inventada e atribuída a ninguém. Nenhum desses
+              autores tem relação com o Pome.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Privacidade como argumento ──────────────────────────── -->
+    <section class="faixa" id="dados">
+      <div class="envolucro duas-colunas">
+        <div>
+          <p class="olho">Seus dados são seus</p>
+          <h2>Nada do que você registra sai do seu computador.</h2>
+          <p class="sobrio">
+            Não é promessa de política de privacidade: é como o app foi
+            construído. Ele não tem para onde enviar.
+          </p>
+        </div>
+        <ul class="lista-limpa">
+          <li>Não tem cadastro, e-mail nem senha.</li>
+          <li>Não tem servidor, nuvem nem sincronização.</li>
+          <li>Não tem rastreador, anúncio nem medição de uso.</li>
+          <li>Funciona sem internet, do primeiro ao último dia.</li>
+          <li>Você exporta tudo num arquivo, ou apaga tudo de uma vez.</li>
+          <li>Se você apagar, some — nem nós temos cópia.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Os limites, ditos por nós mesmos ────────────────────── -->
+    <section class="faixa">
+      <div class="envolucro">
+        <p class="olho">Antes de baixar</p>
+        <h2>O que o Pome não é.</h2>
+        <div class="tres">
+          <article class="cartao">
+            <h3>Não é consultoria</h3>
+            <p>
+              O Pome não recomenda investimento e não substitui profissional
+              habilitado. Nenhuma tela dele deve ser lida como indicação de onde
+              aplicar dinheiro.
+            </p>
+          </article>
+          <article class="cartao">
+            <h3>Os números são estimativas</h3>
+            <p>
+              Os indicadores de saúde financeira são calculados a partir do que
+              você mesmo registrou, e existem para explicar a sua situação — não
+              para atestá-la. Não há nota, pontuação nem selo.
+            </p>
+          </article>
+          <article class="cartao">
+            <h3>É uma versão inicial</h3>
+            <p>
+              O Pome está na versão <span id="versao-inline">0.1.0</span>, para
+              Windows. Os textos legais ainda não passaram por advogado — e o
+              app diz isso na cara, dentro das Configurações.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p id="direitos">© 2026 Gustavo. Todos os direitos reservados.</p>
+    <p>
+      <a href="termos.html">Termos de Uso</a> ·
+      <a href="privacidade.html">Política de Privacidade</a>
+    </p>
+    <p>Pome <span id="versao-rodape">0.1.0</span> — feito no Brasil.</p>
+  </footer>
+
+  <script src="assets/versao.js"></script>
+  <script>
+    /*
+     * Nada aqui é digitado à mão.
+     *
+     * `assets/versao.js` é GERADO por `npm run site`, que lê o instalador de
+     * verdade em `release/` e mede dele a versão, o tamanho e o SHA-256. Um
+     * hash digitado — ou esquecido depois de um build novo — faria a página
+     * afirmar que o arquivo é outro; e como o instalador não é assinado, essa
+     * impressão é a única conferência que a pessoa tem. Impressão errada é
+     * pior que impressão nenhuma, porque parece verificação.
+     *
+     * Quando o instalador ainda não foi gerado, `POME_RELEASE` vem nulo e a
+     * página assume o estado "em preparo" em vez de oferecer um link quebrado.
+     */
+    (function () {
+      const r = window.POME_RELEASE;
+      const botao = document.getElementById('botao-baixar');
+
+      if (!r) {
+        botao.removeAttribute('href');
+        botao.setAttribute('aria-disabled', 'true');
+        botao.textContent = 'Instalador em preparo';
+        document.getElementById('aviso-windows').hidden = true;
+        document.getElementById('selo-tamanho').textContent = '—';
+        return;
+      }
+
+      botao.href = r.url;
+      document.getElementById('selo-tamanho').textContent = r.tamanho;
+      document.getElementById('impressao').textContent = r.sha256;
+      document.getElementById('versao-inline').textContent = r.versao;
+      document.getElementById('versao-rodape').textContent = r.versao;
+    })();
+  </script>
+</body>
+</html>

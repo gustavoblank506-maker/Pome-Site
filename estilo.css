@@ -1,0 +1,461 @@
+/**
+ * Folha de estilo do site do Pome.
+ *
+ * Escrita à mão. A paleta NÃO está aqui: ela vem de `assets/tokens.css`, que é
+ * gerado de `src/theme/tokens.ts` por `npm run site`. Se uma cor precisar
+ * mudar, ela muda no app — senão o site e o produto passam a discordar sobre
+ * qual é o verde do Pome.
+ *
+ * Sem framework, sem build, sem requisição para fora: o site que anuncia um
+ * app sem rastreador não pode pedir fonte emprestada a um terceiro que
+ * registra o IP de quem visita.
+ */
+
+/* ── Fontes, servidas do próprio site ─────────────────────────── */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('assets/fontes/fraunces.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('assets/fontes/plus-jakarta-sans.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* ── Base ──────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--fonte-corpo);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+
+  /* O halo verde subindo do rodapé é o mesmo do app: a árvore que ilumina o
+     preto por baixo. Fixo, para não "descolar" da página durante a rolagem. */
+  background-image: radial-gradient(
+    120% 60% at 50% 118%,
+    rgba(43, 255, 136, 0.16) 0%,
+    rgba(43, 255, 136, 0.05) 38%,
+    transparent 68%
+  );
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--neon);
+  text-decoration-color: var(--neon-dim);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Foco visível é acessibilidade, não enfeite: quem navega por teclado precisa
+   enxergar onde está. */
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.envolucro {
+  width: min(1120px, 100% - 2.5rem);
+  margin-inline: auto;
+}
+
+/* ── Barra do topo ─────────────────────────────────────────────── */
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem clamp(1.25rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--border-neutra);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(6, 8, 6, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.barra nav {
+  display: flex;
+  gap: clamp(0.9rem, 3vw, 1.75rem);
+  font-size: 0.9rem;
+}
+
+.barra nav a {
+  color: var(--cream-mid);
+  text-decoration: none;
+}
+
+.barra nav a:hover {
+  color: var(--cream);
+}
+
+/* ── Hero ──────────────────────────────────────────────────────── */
+
+.hero {
+  padding: clamp(3.5rem, 11vw, 7rem) 0 clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 7.5vw, 4.75rem);
+  margin-bottom: 0.35em;
+}
+
+.hero .linha-fina {
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  color: var(--cream-mid);
+  max-width: 34ch;
+  margin-inline: auto;
+}
+
+/* ── Download ──────────────────────────────────────────────────── */
+
+.baixar {
+  margin-top: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--neon);
+  color: #04170c;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.95rem 2.1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35), 0 12px 40px -12px rgba(43, 255, 136, 0.55);
+}
+
+.botao:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.5), 0 16px 46px -12px rgba(43, 255, 136, 0.7);
+}
+
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.35rem;
+  font-size: 0.85rem;
+  color: var(--cream-soft);
+}
+
+.selos span::before {
+  content: '· ';
+  color: var(--neon-mid);
+}
+
+/* O aviso do SmartScreen. Some quando o instalador for assinado — até lá,
+   esconder o aviso seria deixar a pessoa achar que baixou vírus. */
+.aviso-windows {
+  max-width: 62ch;
+  margin: 1.5rem auto 0;
+  padding: 0.9rem 1.15rem;
+  border: 1px solid var(--border-neutra);
+  border-radius: 12px;
+  background: rgba(241, 239, 227, 0.03);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--cream-mid);
+  text-align: left;
+}
+
+.aviso-windows strong {
+  color: var(--cream);
+  font-weight: 600;
+}
+
+.impressao {
+  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.74rem;
+  color: var(--cream-soft);
+  word-break: break-all;
+}
+
+/* ── Molduras dos aparelhos, em CSS puro ───────────────────────── */
+
+.aparelhos {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  margin: clamp(2rem, 6vw, 4rem) 0 1rem;
+  flex-wrap: wrap;
+}
+
+.notebook {
+  width: min(720px, 100%);
+  flex: 1 1 420px;
+}
+
+.notebook .tela,
+.tablet .tela {
+  background: #000;
+  border: 1px solid rgba(241, 239, 227, 0.14);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 6px #101310;
+}
+
+/* A base do notebook: um trapézio, que é o que dá a leitura de "tampa aberta"
+   sem precisar de imagem de aparelho nenhum — e sem imitar marca de ninguém. */
+.notebook .base {
+  height: 13px;
+  margin: 8px auto 0;
+  width: 116%;
+  margin-left: -8%;
+  background: linear-gradient(#232723, #0d100d);
+  border-radius: 0 0 12px 12px;
+  clip-path: polygon(1.5% 0, 98.5% 0, 100% 100%, 0 100%);
+}
+
+.notebook .base::after {
+  content: '';
+  display: block;
+  width: 14%;
+  height: 3px;
+  margin: 0 auto;
+  border-radius: 0 0 4px 4px;
+  background: rgba(241, 239, 227, 0.12);
+}
+
+.tablet {
+  width: min(330px, 60%);
+  flex: 0 1 300px;
+  padding-bottom: 1.5rem;
+}
+
+.tablet .tela {
+  border-radius: 16px;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9), 0 0 0 8px #101310;
+}
+
+.legenda {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--cream-soft);
+  margin-top: 1.5rem;
+}
+
+/* ── Seções ────────────────────────────────────────────────────── */
+
+section.faixa {
+  padding: clamp(3rem, 8vw, 5.5rem) 0;
+  border-top: 1px solid var(--border-neutra);
+}
+
+section.faixa > .envolucro > h2 {
+  font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+  max-width: 20ch;
+}
+
+.olho {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--neon-mid);
+  margin-bottom: 0.9rem;
+  font-weight: 600;
+}
+
+.tres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin-top: 2.5rem;
+}
+
+.cartao {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.6rem 1.5rem;
+}
+
+.cartao h3 {
+  font-size: 1.3rem;
+}
+
+.cartao p:last-child {
+  margin-bottom: 0;
+  color: var(--cream-mid);
+  font-size: 0.95rem;
+}
+
+.duas-colunas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.lista-limpa {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lista-limpa li {
+  padding-left: 1.6rem;
+  position: relative;
+  color: var(--cream-mid);
+}
+
+.lista-limpa li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon);
+  box-shadow: 0 0 12px var(--neon);
+}
+
+.sobrio {
+  color: var(--cream-mid);
+  font-size: 0.98rem;
+}
+
+/* ── Rodapé ────────────────────────────────────────────────────── */
+
+.rodape {
+  border-top: 1px solid var(--border-neutra);
+  padding: 2.5rem clamp(1.25rem, 4vw, 2.5rem) 3rem;
+  text-align: center;
+  color: var(--cream-soft);
+  font-size: 0.86rem;
+}
+
+.rodape p {
+  margin: 0.35rem 0;
+}
+
+.rodape a {
+  color: var(--cream-mid);
+}
+
+/* ── Páginas de documento (termos e privacidade) ───────────────── */
+
+body.documento main {
+  width: min(70ch, 100% - 2.5rem);
+  margin-inline: auto;
+  padding: clamp(2.5rem, 7vw, 4.5rem) 0 1rem;
+}
+
+body.documento h1 {
+  font-size: clamp(2.1rem, 5.5vw, 3rem);
+}
+
+body.documento h2 {
+  font-size: 1.35rem;
+  margin-top: 2.5rem;
+}
+
+body.documento .meta {
+  color: var(--cream-soft);
+  font-size: 0.85rem;
+  margin-top: -0.5em;
+}
+
+body.documento .resumo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.4rem 1.5rem 1.5rem;
+  margin: 2rem 0 1rem;
+}
+
+body.documento .resumo h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+  color: var(--neon-mid);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.documento .resumo ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--cream-mid);
+}
+
+body.documento p {
+  color: rgba(241, 239, 227, 0.86);
+}
+
+/* ── Movimento ─────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
