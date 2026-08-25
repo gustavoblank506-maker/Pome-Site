@@ -437,6 +437,13 @@ main,
 
 /* A base do notebook: um trapézio, que é o que dá a leitura de "tampa aberta"
    sem precisar de imagem de aparelho nenhum — e sem imitar marca de ninguém. */
+.demo {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #060806;
+}
+
 .notebook .base {
   height: 13px;
   margin: 8px auto 0;

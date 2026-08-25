@@ -101,8 +101,32 @@
       <div class="aparelhos">
         <div class="notebook">
           <div class="tela">
-            <img src="assets/telas/home.png" width="1359" height="942"
-                 alt="Tela inicial do Pome: a meta 'Minha liberdade' no centro de um anel, com o valor guardado e o mês em foco.">
+            <!--
+              Vídeo do app DE VERDADE, gravado por `npm run demo`: o Chromium
+              do Electron captura a janela enquanto um roteiro digita, lança e
+              navega. Nada aqui é animação desenhada — promessa em página de
+              download vira decepção na instalação.
+
+              `preload="none"` para os 5 MB não saírem antes de alguém ver a
+              página; quem chega e não rola até aqui não paga por eles. O
+              pôster é o que aparece enquanto isso, e é também o que fica
+              quando o sistema pede movimento reduzido.
+            -->
+            <video
+              id="demo"
+              class="demo"
+              width="1278"
+              height="800"
+              poster="assets/video/demo-poster.jpg"
+              preload="none"
+              muted
+              loop
+              playsinline
+              aria-label="Gravação do Pome em uso: lançar dois gastos, ver a rosca do mês se dividir, a saúde financeira e o material de estudo."
+            >
+              <source src="assets/video/demo.webm" type="video/webm">
+              <img src="assets/telas/home.png" alt="Tela inicial do Pome, com a meta no centro do anel.">
+            </video>
           </div>
           <div class="base"></div>
         </div>
@@ -231,6 +255,54 @@
     </p>
     <p>Pome <span id="versao-rodape">0.1.0</span> — feito no Brasil.</p>
   </footer>
+
+  <script>
+    /*
+     * O vídeo só toca quando está à vista, e só se o sistema deixar.
+     *
+     * Três decisões, cada uma com motivo:
+     *
+     * 1. `IntersectionObserver` em vez de `autoplay`: com autoplay puro, os
+     *    5 MB começam a baixar assim que a página abre, mesmo para quem veio
+     *    ler os Termos e nunca vai rolar até aqui.
+     * 2. Pausa ao sair da tela. Vídeo tocando fora de vista gasta bateria de
+     *    quem está lendo outra parte da página.
+     * 3. `prefers-reduced-motion` cancela tudo e deixa o pôster: quem pediu
+     *    menos movimento ao sistema não deve receber vídeo em laço, e o
+     *    controle nativo continua ali para quem quiser assistir mesmo assim.
+     */
+    document.addEventListener('DOMContentLoaded', function () {
+      var video = document.getElementById('demo');
+      if (!video) return;
+
+      var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (quieto.matches) {
+        video.setAttribute('controls', '');
+        return;
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        video.setAttribute('controls', '');
+        return;
+      }
+
+      var observador = new IntersectionObserver(
+        function (entradas) {
+          entradas.forEach(function (e) {
+            if (e.isIntersecting) {
+              var p = video.play();
+              if (p && p.catch) p.catch(function () { video.setAttribute('controls', ''); });
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      observador.observe(video);
+    });
+  </script>
 
   <script src="assets/versao.js"></script>
   <script>
