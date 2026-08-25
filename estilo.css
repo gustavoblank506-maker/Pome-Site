@@ -44,15 +44,10 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 
-  /* O halo verde subindo do rodapé é o mesmo do app: a árvore que ilumina o
-     preto por baixo. Fixo, para não "descolar" da página durante a rolagem. */
-  background-image: radial-gradient(
-    120% 60% at 50% 118%,
-    rgba(43, 255, 136, 0.16) 0%,
-    rgba(43, 255, 136, 0.05) 38%,
-    transparent 68%
-  );
-  background-attachment: fixed;
+  /* O halo verde NÃO está aqui, e isso é decisão: ele é um elemento próprio
+     (`.halo`, dentro de `.ambiente`) porque precisa respirar, e animar um
+     gradiente de `background` repinta a página inteira a cada quadro. Deixar
+     os dois conviverem somaria duas camadas de verde e lavaria o preto. */
 }
 
 h1,
@@ -96,6 +91,127 @@ img {
 .envolucro {
   width: min(1120px, 100% - 2.5rem);
   margin-inline: auto;
+}
+
+/* ── Ambiente: o halo que respira e as folhas que caem ─────────
+ *
+ * Mesma linguagem do app — ver `ArvoreDeFundo.tsx` e o `estilos.css` do
+ * renderer. Duas regras herdadas de lá, e as duas foram pagas com bug:
+ *
+ * 1. SÓ `opacity` E `transform` ANIMAM. Qualquer outra propriedade tira o
+ *    trabalho da GPU e faz o navegador recalcular layout a cada quadro — numa
+ *    página que rola 3000px, isso aparece como travada na rolagem.
+ * 2. Nada disso pode interceptar clique. `pointer-events: none` no contêiner,
+ *    e `aria-hidden` no HTML: é decoração, e leitor de tela não deve narrar
+ *    folha nenhuma.
+ */
+
+.ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* O conteúdo sobe acima do ambiente. Sem isto, o halo cobre o texto. */
+.barra,
+main,
+.rodape {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * O halo respira. É um elemento próprio, e não o `background` do body, porque
+ * animar gradiente de fundo repinta a página inteira a cada quadro; animar a
+ * opacidade de uma camada é trabalho de GPU.
+ */
+.halo {
+  position: absolute;
+  left: 50%;
+  bottom: -30vh;
+  width: 140vmax;
+  height: 90vh;
+  translate: -50% 0;
+  background: radial-gradient(
+    closest-side,
+    rgba(43, 255, 136, 0.22),
+    rgba(43, 255, 136, 0.06) 55%,
+    transparent 75%
+  );
+  animation: respirar 11s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@keyframes respirar {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.07);
+  }
+}
+
+/*
+ * As folhas.
+ *
+ * Cada uma tem duração e atraso próprios, escritos no HTML — é o que impede
+ * que as dez caiam em fileira, como se fossem uma coisa só. Os atrasos são
+ * NEGATIVOS de propósito: a animação começa no meio do caminho, então quem
+ * abre a página encontra folhas já caindo em vez de um céu vazio esperando.
+ */
+.folha {
+  position: absolute;
+  top: -10%;
+  color: var(--neon);
+  opacity: 0;
+  animation-name: cair;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: opacity, transform;
+}
+
+.folha svg {
+  display: block;
+}
+
+@keyframes cair {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  10% {
+    opacity: var(--folha-opacidade, 0.5);
+  }
+  85% {
+    opacity: var(--folha-opacidade, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(4rem, 115vh, 0) rotate(160deg);
+  }
+}
+
+/*
+ * Movimento reduzido não é "animação mais rápida": é AUSÊNCIA. O bloco geral
+ * no fim deste arquivo zera a duração de tudo, e uma folha com duração zero
+ * congelaria no fim do percurso — dez folhas paradas no rodapé, que é pior do
+ * que folha nenhuma. Então some com elas, e o halo fica parado no meio da
+ * respiração, que é onde ele é bonito.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .folha {
+    display: none;
+  }
+
+  .halo {
+    animation: none;
+    opacity: 0.75;
+  }
 }
 
 /* ── Barra do topo ─────────────────────────────────────────────── */
@@ -189,6 +305,68 @@ img {
 .botao:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.5), 0 16px 46px -12px rgba(43, 255, 136, 0.7);
+}
+
+/*
+ * O botão reage ao clique, e a reação é VERDADEIRA.
+ *
+ * Não é barra de progresso: o navegador é quem baixa, e ele já tem a dele —
+ * inventar uma segunda seria mentir sobre um número que esta página não tem
+ * como saber. O que existe aqui é confirmação: 98 MB demoram a aparecer no
+ * canto do navegador, e sem sinal nenhum a pessoa clica de novo achando que
+ * não pegou.
+ *
+ * O brilho corre uma vez e para. Animação que gira para sempre sugere espera
+ * infinita — e a espera, aqui, é do navegador, não da página.
+ */
+.botao::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+.botao {
+  position: relative;
+  overflow: hidden;
+}
+
+.botao.baixando::after {
+  animation: correr 1.1s ease-out 1;
+}
+
+@keyframes correr {
+  0% {
+    opacity: 0.9;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* O aviso de que o download começou. Entra por baixo do botão e some sozinho. */
+.confirmacao {
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  color: var(--neon-mid);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.confirmacao.visivel {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .selos {

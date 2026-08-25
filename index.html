@@ -29,6 +29,24 @@
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
+  <!-- Decoração pura: não é narrada por leitor de tela e não intercepta
+       clique. As folhas usam o mesmo desenho da árvore do app — uma gota de
+       dois arcos — e cada uma carrega a própria duração e o próprio atraso,
+       porque dez folhas com o mesmo ritmo caem como se fossem uma só. Os
+       atrasos são negativos: a página abre com as folhas já em queda. -->
+  <div class="ambiente" aria-hidden="true">
+    <div class="halo"></div>
+
+    <span class="folha" style="left: 8%;  animation-duration: 26s; animation-delay: -4s;  --folha-opacidade: 0.30"><svg width="11" height="15" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/><path d="M6 2 L6 14" stroke="currentColor" stroke-width="0.5" opacity="0.5"/></svg></span>
+    <span class="folha" style="left: 19%; animation-duration: 34s; animation-delay: -17s; --folha-opacidade: 0.20"><svg width="9" height="12" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/></svg></span>
+    <span class="folha" style="left: 31%; animation-duration: 22s; animation-delay: -9s;  --folha-opacidade: 0.38"><svg width="13" height="17" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/><path d="M6 2 L6 14" stroke="currentColor" stroke-width="0.5" opacity="0.5"/></svg></span>
+    <span class="folha" style="left: 44%; animation-duration: 30s; animation-delay: -22s; --folha-opacidade: 0.22"><svg width="10" height="13" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/></svg></span>
+    <span class="folha" style="left: 57%; animation-duration: 24s; animation-delay: -2s;  --folha-opacidade: 0.34"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/><path d="M6 2 L6 14" stroke="currentColor" stroke-width="0.5" opacity="0.5"/></svg></span>
+    <span class="folha" style="left: 68%; animation-duration: 32s; animation-delay: -13s; --folha-opacidade: 0.18"><svg width="9" height="12" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/></svg></span>
+    <span class="folha" style="left: 79%; animation-duration: 20s; animation-delay: -7s;  --folha-opacidade: 0.40"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/><path d="M6 2 L6 14" stroke="currentColor" stroke-width="0.5" opacity="0.5"/></svg></span>
+    <span class="folha" style="left: 90%; animation-duration: 28s; animation-delay: -19s; --folha-opacidade: 0.26"><svg width="10" height="14" viewBox="0 0 12 16" fill="none"><path d="M6 1 C10 5, 10 11, 6 15 C2 11, 2 5, 6 1 Z" fill="currentColor" opacity="0.55"/></svg></span>
+  </div>
+
   <header class="barra">
     <a class="marca" href="index.html">
       <img src="assets/marca/pome-emblema.svg" alt="" width="28" height="28">
@@ -63,6 +81,9 @@
           <span>Sem cadastro</span>
           <span id="selo-tamanho">98 MB</span>
         </p>
+        <!-- `aria-live` para que quem usa leitor de tela ouça a confirmação:
+             sem isso, o aviso aparece só para quem enxerga a tela. -->
+        <p class="confirmacao" id="confirmacao" role="status" aria-live="polite"></p>
       </div>
 
       <p class="aviso-windows" id="aviso-windows">
@@ -244,6 +265,38 @@
       document.getElementById('impressao').textContent = r.sha256;
       document.getElementById('versao-inline').textContent = r.versao;
       document.getElementById('versao-rodape').textContent = r.versao;
+
+      /*
+       * A confirmação do clique — e o que ela deliberadamente NÃO é.
+       *
+       * Não há barra de progresso: quem baixa é o navegador, e ele já mostra a
+       * dele. Uma segunda barra aqui seria um número inventado, porque esta
+       * página não tem como saber quantos bytes chegaram.
+       *
+       * O que existe é confirmação, e ela resolve um problema real: 98 MB
+       * demoram a aparecer no canto do navegador, e sem sinal nenhum a pessoa
+       * clica de novo achando que não pegou. A navegação segue normalmente —
+       * nada de `preventDefault`, senão o download não acontece.
+       */
+      const confirmacao = document.getElementById('confirmacao');
+      let relogio;
+
+      botao.addEventListener('click', function () {
+        clearTimeout(relogio);
+        botao.classList.remove('baixando');
+        // Forçar o reflow reinicia a animação quando se clica duas vezes
+        // seguidas; sem isto, o segundo clique não acende nada.
+        void botao.offsetWidth;
+        botao.classList.add('baixando');
+
+        confirmacao.textContent = 'O download começou — ' + r.tamanho + '.';
+        confirmacao.classList.add('visivel');
+
+        relogio = setTimeout(function () {
+          confirmacao.classList.remove('visivel');
+          botao.classList.remove('baixando');
+        }, 6000);
+      });
     })();
   </script>
 </body>
