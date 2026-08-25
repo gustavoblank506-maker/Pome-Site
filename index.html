@@ -100,14 +100,6 @@
         <p class="confirmacao" id="confirmacao" role="status" aria-live="polite"></p>
       </div>
 
-      <p class="aviso-windows" id="aviso-windows">
-        <strong>O Windows vai avisar que não conhece este programa.</strong>
-        Isso acontece porque o instalador ainda não tem certificado de
-        assinatura — não porque haja algo de errado com ele. Para instalar
-        mesmo assim: <em>Mais informações</em> → <em>Executar assim mesmo</em>.
-        Se quiser conferir que o arquivo é o mesmo que publicamos, o SHA-256 é
-        <span class="impressao" id="impressao">—</span>
-      </p>
     </div>
 
     <!-- ── Os aparelhos ────────────────────────────────────────── -->
@@ -341,14 +333,12 @@
         botao.removeAttribute('href');
         botao.setAttribute('aria-disabled', 'true');
         botao.textContent = 'Instalador em preparo';
-        document.getElementById('aviso-windows').hidden = true;
         document.getElementById('selo-tamanho').textContent = '—';
         return;
       }
 
       botao.href = r.url;
       document.getElementById('selo-tamanho').textContent = r.tamanho;
-      document.getElementById('impressao').textContent = r.sha256;
       document.getElementById('versao-inline').textContent = r.versao;
       document.getElementById('versao-rodape').textContent = r.versao;
 

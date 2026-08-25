@@ -383,33 +383,6 @@ main,
   color: var(--neon-mid);
 }
 
-/* O aviso do SmartScreen. Some quando o instalador for assinado — até lá,
-   esconder o aviso seria deixar a pessoa achar que baixou vírus. */
-.aviso-windows {
-  max-width: 62ch;
-  margin: 1.5rem auto 0;
-  padding: 0.9rem 1.15rem;
-  border: 1px solid var(--border-neutra);
-  border-radius: 12px;
-  background: rgba(241, 239, 227, 0.03);
-  font-size: 0.86rem;
-  line-height: 1.55;
-  color: var(--cream-mid);
-  text-align: left;
-}
-
-.aviso-windows strong {
-  color: var(--cream);
-  font-weight: 600;
-}
-
-.impressao {
-  font-family: ui-monospace, 'Cascadia Mono', Menlo, monospace;
-  font-size: 0.74rem;
-  color: var(--cream-soft);
-  word-break: break-all;
-}
-
 /* ── Molduras dos aparelhos, em CSS puro ───────────────────────── */
 
 .aparelhos {
