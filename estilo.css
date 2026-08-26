@@ -35,6 +35,17 @@
   box-sizing: border-box;
 }
 
+/*
+ * Nenhum enfeite pode empurrar a página para o lado.
+ *
+ * `clip` e não `hidden`: `overflow-x: hidden` no <html> transforma o
+ * documento em contêiner de rolagem e QUEBRA o `position: sticky` da barra do
+ * topo. `clip` corta o transbordo sem criar rolagem nenhuma.
+ */
+html {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -259,6 +270,7 @@ main,
 /* ── Hero ──────────────────────────────────────────────────────── */
 
 .hero {
+  position: relative;
   /* O de cima é respiro; o de baixo era vão morto. Com a caixa do aviso fora,
      este padding somava com a margem dos aparelhos e empurrava o vídeo para
      fora da primeira tela — justo o que a pessoa veio ver. */
@@ -619,5 +631,222 @@ body.documento p {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * EFEITOS
+ *
+ * Regras que valem para tudo aqui embaixo, e que não são estilo — são o que
+ * separa efeito de estrago:
+ *
+ * 1. Só `opacity` e `transform`. Toda animação roda na GPU; nenhuma delas
+ *    obriga o navegador a recalcular layout durante a rolagem.
+ * 2. Nada bloqueia conteúdo. Quem chega com JavaScript desligado, ou com o
+ *    observador indisponível, vê a página inteira — apenas sem a entrada.
+ * 3. `prefers-reduced-motion` não acelera: DESLIGA. O bloco no fim do arquivo
+ *    zera as durações, e cada efeito daqui tem um estado final legível.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* ── A árvore que se desenha atrás do herói ─────────────────────
+ *
+ * O mesmo emblema da marca, desenhado galho por galho — é o gesto de abertura
+ * do app trazido para a página, e a única coisa aqui que ninguém consegue
+ * copiar sem ter a árvore. O SVG chega por `assets/arvore.js`, gerado do kit,
+ * com `pathLength="1"` em cada traçado: assim uma regra de CSS serve para os
+ * quarenta, independentemente do comprimento real de cada curva.
+ */
+/*
+ * A caixa da árvore é ancorada NO HERÓI, e não no <main>.
+ *
+ * Sem `position: relative` no herói, o `absolute` daqui subia até o <main> e
+ * media a página inteira: a árvore nascia 1712 px de largura numa janela de
+ * 1426 e criava rolagem horizontal — que é o defeito que a própria folha de
+ * estilo proíbe algumas linhas acima.
+ */
+.arvore-heroi {
+  position: absolute;
+  inset: -14% 0 auto;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.arvore-heroi svg {
+  width: min(105vh, 96vw);
+  height: auto;
+  opacity: 0.16;
+}
+
+.arvore-heroi path,
+.arvore-heroi line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tracar 2s ease forwards;
+}
+
+.arvore-heroi circle {
+  opacity: 0;
+  animation: acender 1.4s ease forwards;
+}
+
+@keyframes tracar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes acender {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Entrada ao rolar ──────────────────────────────────────────
+ *
+ * O estado inicial só é aplicado quando o JavaScript confirma que vai
+ * observar (`.js-revela` no <html>). Sem essa trava, quem tem JS desligado
+ * ficaria com a página inteira invisível — animação que esconde conteúdo é o
+ * jeito mais rápido de transformar enfeite em defeito.
+ */
+.js-revela .revelar {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.js-revela .revelar.visto {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ── O título, palavra por palavra ─────────────────────────────
+ *
+ * Mesma ideia da tela de boas-vindas do app: o texto CHEGA, em vez de já estar
+ * lá. Cada palavra é um bloco próprio para o `transform` não arrastar a linha
+ * inteira junto.
+ */
+.js-revela .palavra {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  animation: chegar 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes chegar {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── A luz que segue o cursor nos cartões ──────────────────────
+ *
+ * O ponteiro escreve `--x` e `--y` no próprio cartão, e o gradiente lê. Nada
+ * de JavaScript pintando: o navegador resolve no compositor, e a folha de
+ * estilo continua sendo dona da aparência.
+ */
+.cartao {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.35s ease, transform 0.35s ease;
+}
+
+.cartao::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    240px circle at var(--x, 50%) var(--y, 0%),
+    rgba(43, 255, 136, 0.12),
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.cartao:hover {
+  border-color: rgba(43, 255, 136, 0.35);
+  transform: translateY(-2px);
+}
+
+.cartao:hover::before {
+  opacity: 1;
+}
+
+.cartao > * {
+  position: relative;
+}
+
+/* ── Os números do material ────────────────────────────────────
+ *
+ * Contados de `src/data` pelo gerador. Afirmação de fato numa página pública
+ * não se digita: no dia em que um módulo entrar, o número muda sozinho.
+ */
+.numeros {
+  list-style: none;
+  margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.25rem;
+  border-top: 1px solid var(--border-neutra);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+}
+
+.numeros b {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 2.9rem);
+  color: var(--neon);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.numeros span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--cream-soft);
+}
+
+/* ── A barra ganha peso depois que a página rola ───────────────*/
+.barra {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.barra.rolou {
+  background: rgba(6, 8, 6, 0.94);
+  border-bottom-color: var(--border);
+}
+
+/* ── Movimento reduzido: tudo acima fica no estado final ───────*/
+@media (prefers-reduced-motion: reduce) {
+  .arvore-heroi path,
+  .arvore-heroi line {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .arvore-heroi circle {
+    opacity: 1;
+    animation: none;
+  }
+
+  .js-revela .revelar,
+  .js-revela .palavra {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .cartao:hover {
+    transform: none;
   }
 }

@@ -76,7 +76,12 @@
   <main>
     <!-- ── Hero ────────────────────────────────────────────────── -->
     <div class="hero envolucro" id="baixar">
-      <h1>Economizar com propósito.</h1>
+      <!-- A árvore da marca, desenhada galho por galho. O SVG chega por
+           `assets/arvore.js`, gerado do kit — o emblema continua existindo num
+           lugar só. É decoração: não é narrada e não intercepta clique. -->
+      <div class="arvore-heroi" id="arvore-heroi" aria-hidden="true"></div>
+
+      <h1 id="titulo">Economizar com propósito.</h1>
       <p class="linha-fina">
         O Pome organiza o seu dinheiro em volta de uma meta que tem nome — e não
         em volta de uma planilha.
@@ -104,7 +109,7 @@
 
     <!-- ── Os aparelhos ────────────────────────────────────────── -->
     <div class="envolucro">
-      <div class="aparelhos">
+      <div class="aparelhos revelar">
         <div class="notebook">
           <div class="tela">
             <!--
@@ -150,7 +155,7 @@
     </div>
 
     <!-- ── Os três diferenciais ────────────────────────────────── -->
-    <section class="faixa" id="o-que-e">
+    <section class="faixa revelar" id="o-que-e">
       <div class="envolucro">
         <p class="olho">O que é</p>
         <h2>Um aliado honesto, não mais um app de planilha.</h2>
@@ -159,8 +164,15 @@
           dinheiro está indo — sempre ao lado do sonho que você mesmo nomeou.
         </p>
 
+        <ul class="numeros revelar" id="numeros">
+          <li><b data-numero="24">24</b><span>aulas escritas</span></li>
+          <li><b data-numero="7">7</b><span>módulos de estudo</span></li>
+          <li><b data-numero="3">3</b><span>indicadores de saúde</span></li>
+          <li><b data-numero="0">0</b><span>rastreadores</span></li>
+        </ul>
+
         <div class="tres">
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>Propósito primeiro</h3>
             <p>
               O app começa perguntando qual é o sonho, não quanto você ganha. A
@@ -170,7 +182,7 @@
             <p>Número existe para servir ao sonho, não o contrário.</p>
           </article>
 
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>Seus direitos à mão</h3>
             <p>
               O material de estudo cobre o que costuma custar caro por
@@ -181,7 +193,7 @@
             <p>Texto de lei é público, e está citado com a fonte.</p>
           </article>
 
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>Evidência, com crédito</h3>
             <p>
               Os princípios que aparecem no app vêm de educadores financeiros
@@ -197,8 +209,8 @@
     </section>
 
     <!-- ── Privacidade como argumento ──────────────────────────── -->
-    <section class="faixa" id="dados">
-      <div class="envolucro duas-colunas">
+    <section class="faixa revelar" id="dados">
+      <div class="envolucro duas-colunas revelar">
         <div>
           <p class="olho">Seus dados são seus</p>
           <h2>Nada do que você registra sai do seu computador.</h2>
@@ -219,12 +231,12 @@
     </section>
 
     <!-- ── Os limites, ditos por nós mesmos ────────────────────── -->
-    <section class="faixa">
+    <section class="faixa revelar">
       <div class="envolucro">
         <p class="olho">Antes de baixar</p>
         <h2>O que o Pome não é.</h2>
         <div class="tres">
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>Não é consultoria</h3>
             <p>
               O Pome não recomenda investimento e não substitui profissional
@@ -232,7 +244,7 @@
               aplicar dinheiro.
             </p>
           </article>
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>Os números são estimativas</h3>
             <p>
               Os indicadores de saúde financeira são calculados a partir do que
@@ -240,7 +252,7 @@
               para atestá-la. Não há nota, pontuação nem selo.
             </p>
           </article>
-          <article class="cartao">
+          <article class="cartao revelar">
             <h3>É uma versão inicial</h3>
             <p>
               O Pome está na versão <span id="versao-inline">0.1.0</span>, para
@@ -308,6 +320,173 @@
 
       observador.observe(video);
     });
+  </script>
+
+  <script src="assets/arvore.js"></script>
+  <script src="assets/numeros.js"></script>
+  <script>
+    /*
+     * Os efeitos da página.
+     *
+     * Três regras que valem para todos eles:
+     *
+     * 1. NADA AQUI PODE ESCONDER CONTEÚDO PARA SEMPRE. A classe `js-revela` só
+     *    entra no <html> depois de o observador existir — sem ela, o CSS não
+     *    aplica estado inicial nenhum, e quem chega sem JavaScript vê a página
+     *    inteira, apenas sem a entrada.
+     * 2. `prefers-reduced-motion` desliga tudo. Não acelera: desliga, e o
+     *    estado final é o legível.
+     * 3. Só `opacity` e `transform`. O JavaScript escreve classe e variável
+     *    CSS; quem pinta é o navegador.
+     */
+    (function () {
+      var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ── A árvore da marca, desenhada galho por galho ────────────
+      var casa = document.getElementById('arvore-heroi');
+      if (casa && window.POME_ARVORE) {
+        casa.innerHTML = window.POME_ARVORE;
+        if (!quieto) {
+          // O atraso é distribuído do tronco para as pontas: os traçados vêm
+          // nessa ordem no arquivo da marca, então o índice já é a ordem certa.
+          var tracos = casa.querySelectorAll('path, line, circle');
+          for (var i = 0; i < tracos.length; i++) {
+            tracos[i].style.animationDelay = (0.25 + i * 0.045).toFixed(2) + 's';
+          }
+        }
+      }
+
+      // ── O título chega palavra por palavra ──────────────────────
+      var titulo = document.getElementById('titulo');
+      if (titulo && !quieto) {
+        document.documentElement.classList.add('js-revela');
+        var palavras = titulo.textContent.split(' ');
+        titulo.textContent = '';
+        palavras.forEach(function (p, i) {
+          var span = document.createElement('span');
+          span.className = 'palavra';
+          span.textContent = p;
+          span.style.animationDelay = (0.15 + i * 0.11).toFixed(2) + 's';
+          titulo.appendChild(span);
+          if (i < palavras.length - 1) titulo.appendChild(document.createTextNode(' '));
+        });
+      }
+
+      // ── Entrada ao rolar ────────────────────────────────────────
+      var alvos = document.querySelectorAll('.revelar');
+      if (!quieto && 'IntersectionObserver' in window && alvos.length) {
+        document.documentElement.classList.add('js-revela');
+
+        var observador = new IntersectionObserver(
+          function (entradas) {
+            entradas.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              // Escalonar por irmão: os três cartões de uma faixa entram em
+              // cascata, e não como um bloco só.
+              var irmaos = e.target.parentElement
+                ? [].slice.call(e.target.parentElement.children).filter(function (n) {
+                    return n.classList && n.classList.contains('revelar');
+                  })
+                : [];
+              var ordem = Math.max(0, irmaos.indexOf(e.target));
+              e.target.style.transitionDelay = (ordem * 0.09).toFixed(2) + 's';
+              e.target.classList.add('visto');
+              observador.unobserve(e.target);
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+        );
+
+        for (var j = 0; j < alvos.length; j++) observador.observe(alvos[j]);
+
+        /*
+         * A REDE DE SEGURANÇA, e ela não é opcional.
+         *
+         * Todo o conteúdo abaixo da primeira tela nasce invisível esperando o
+         * observador. Se ele não disparar — navegador antigo, aba restaurada
+         * em segundo plano, contêiner que o cálculo de interseção não enxerga,
+         * ou simplesmente um caso que eu não previ — a página fica em branco.
+         *
+         * Enfeite não pode ser o único caminho até o texto. Passados dois
+         * segundos, tudo o que ainda estiver escondido aparece, com ou sem
+         * animação. Perder a entrada é um detalhe; perder a página é o produto.
+         */
+        setTimeout(function () {
+          for (var s = 0; s < alvos.length; s++) alvos[s].classList.add('visto');
+        }, 2000);
+      }
+
+      // ── Os números contam ao aparecer ───────────────────────────
+      //
+      // As metas vêm de `assets/numeros.js`, contadas de src/data pelo gerador.
+      // O HTML já traz o valor final escrito: se o JavaScript não rodar, a
+      // página informa certo — só não conta.
+      var numeros = document.getElementById('numeros');
+      if (numeros && window.POME_NUMEROS) {
+        var campos = numeros.querySelectorAll('[data-numero]');
+        var reais = [window.POME_NUMEROS.aulas, window.POME_NUMEROS.modulos, window.POME_NUMEROS.indicadores, 0];
+        for (var k = 0; k < campos.length; k++) {
+          if (typeof reais[k] === 'number') {
+            campos[k].setAttribute('data-numero', String(reais[k]));
+            campos[k].textContent = String(reais[k]);
+          }
+        }
+
+        if (!quieto && 'IntersectionObserver' in window) {
+          var contador = new IntersectionObserver(
+            function (entradas) {
+              entradas.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                contador.unobserve(e.target);
+                var campos2 = e.target.querySelectorAll('[data-numero]');
+                for (var m = 0; m < campos2.length; m++) contar(campos2[m]);
+              });
+            },
+            { threshold: 0.4 }
+          );
+          contador.observe(numeros);
+        }
+      }
+
+      function contar(elemento) {
+        var alvo = parseInt(elemento.getAttribute('data-numero'), 10) || 0;
+        if (alvo === 0) return;
+        var inicio = null;
+        var duracao = 900;
+        elemento.textContent = '0';
+        requestAnimationFrame(function passo(agora) {
+          if (inicio === null) inicio = agora;
+          var t = Math.min(1, (agora - inicio) / duracao);
+          // Desacelera no fim: contador linear parece máquina, e este é um
+          // número sobre trabalho humano.
+          var suave = 1 - Math.pow(1 - t, 3);
+          elemento.textContent = String(Math.round(alvo * suave));
+          if (t < 1) requestAnimationFrame(passo);
+        });
+      }
+
+      // ── A luz que segue o cursor nos cartões ────────────────────
+      var cartoes = document.querySelectorAll('.cartao');
+      for (var n = 0; n < cartoes.length; n++) {
+        cartoes[n].addEventListener('pointermove', function (evento) {
+          var caixa = this.getBoundingClientRect();
+          this.style.setProperty('--x', ((evento.clientX - caixa.left) / caixa.width) * 100 + '%');
+          this.style.setProperty('--y', ((evento.clientY - caixa.top) / caixa.height) * 100 + '%');
+        });
+      }
+
+      // ── A barra ganha peso depois que a página sai do topo ──────
+      var barra = document.querySelector('.barra');
+      if (barra) {
+        var aoRolar = function () {
+          barra.classList.toggle('rolou', window.scrollY > 12);
+        };
+        aoRolar();
+        // `passive` porque este ouvinte nunca cancela a rolagem — sem isso o
+        // navegador espera pelo handler antes de rolar, e a página fica presa.
+        window.addEventListener('scroll', aoRolar, { passive: true });
+      }
+    })();
   </script>
 
   <script src="assets/versao.js"></script>
